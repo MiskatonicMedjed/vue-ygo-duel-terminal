@@ -12,29 +12,28 @@
 </template>
 
 <script>
-import apiClient, { devBasicAuth } from "@/api/apiClient";
+import apiClient, { basicAuth } from "@/api/apiClient";
 
 export default {
   name: "LoginForm",
   data() {
     return {
       msg: String,
+      default: ''
     };
   },
-  methods: {
-    async authenticate() {
-      try {
-        devBasicAuth();
+  async created() {
+    basicAuth();
 
-        const response = await apiClient.get("/get_detailed_trunk?username=boloplayer");
-        console.log(response);
-        this.msg = response.data;
-      } catch (error) {
+    this.msg = await apiClient.get('/')
+      .then(function (response) {
+        return response.data.msg;
+      })
+      .catch(function (error) {
         console.error("Authentication failed:", error);
-        this.response = error.response?.data || "Error occurred";
-      }
-    },
-  }
+        return error.response?.data || "Error occurred";
+      });
+  },
 };
 </script>
 

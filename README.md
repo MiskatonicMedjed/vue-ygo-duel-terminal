@@ -7,27 +7,22 @@ This project is designed to serve as the frontend of the py-ygo-duel-terminal ap
 ## Commands
 
 ### Project setup
+#### Install node packages:
 ```
 npm install
 ```
-
-Installs required dependencies according to the package.json file.
-
-For API integration, consult example.env for instructions regarding environment variables.
-
-### Compiles and hot-reloads for development
+#### Compiles and hot-reloads for development:
 ```
 npm run serve
 ```
 
+For API integration, consult example.env for instructions regarding environment variables.
+Check router for internal routes, app.vue for navbar and apiClient for registered backend api endpoints.
+
+
 ### Compiles and minifies for production
 ```
 npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
 ```
 
 ### Customize configuration

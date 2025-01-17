@@ -1,8 +1,8 @@
 <template>
-  <div class="extra-deck-container">
-    <h1>Trunk for {{ username }}</h1>
+  <div class="deck-display">
+    <h2>{{ name }}</h2>
     <ul>
-      <li v-for="card in extraDeck" :key="card.id" class="card-item">
+      <li v-for="card in deck" :key="card.id" class="card-item">
         <img :src="card.imageUrl" :alt="card.name" class="card-image" />
         <div class="card-details">
           <h2>{{ card.name }}</h2>
@@ -15,35 +15,34 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
-  name: "TrunkView",
-  data() {
-    return {
-      username: "",
-      extraDeck: [],
-    };
-  },
-  async created() {
-    try {
-      this.username = "boloplayer";
-      const response = await axios.get(`/api/cards?username=${this.username}`);
-      const { cards, trunk } = response.data;
-      this.processExtraDeck(cards, trunk.extra_deck);
-    } catch (error) {
-      console.error("Error fetching cards:", error);
+  name: "DeckDisplay",
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    deckInventory: {
+      required: true
+    },
+    cards: {
+      required: true
     }
   },
+  data() {
+    return {
+      deck: null,
+    };
+  },
   methods: {
-    processExtraDeck(cards, extraDeckData) {
-      this.extraDeck = Object.keys(extraDeckData)
+    processDeck(cards, deckData) {
+      return Object.keys(deckData)
         .map((cardId) => {
           const card = cards.find((c) => c.id === parseInt(cardId));
           if (card) {
             return {
               ...card,
-              copies: extraDeckData[cardId],
+              copies: deckData[cardId],
             };
           }
           return null;
@@ -51,11 +50,14 @@ export default {
         .filter(Boolean); // Remove any null values if cards are not found
     },
   },
-};
+  async created() {
+    this.deck = this.processDeck(this.cards, this.deckInventory);
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-.extra-deck-container {
+.deck-display {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
