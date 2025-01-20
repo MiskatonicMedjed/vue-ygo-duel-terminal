@@ -4,20 +4,20 @@
   </div>
   <div class="container" v-if="errorMessage === null">
     <h1>Inventory for {{ username }}</h1>
-    <deck-display v-if="cards != null" :cards="cards" :deck-inventory="mainDeck"   name="Main Deck"  />
-    <deck-display v-if="cards != null" :cards="cards" :deck-inventory="extraDeck"  name="Extra Deck" />
-    <deck-display v-if="cards != null" :cards="cards" :deck-inventory="sideDeck"   name="Side Deck"  />
-    <deck-display v-if="cards != null" :cards="cards" :deck-inventory="trunkDeck"  name="Trunk"      />
+    <card-field v-if="cards != null" :cards="cards" :deck-inventory="mainDeck"   name="Main Deck"  />
+    <card-field v-if="cards != null" :cards="cards" :deck-inventory="extraDeck"  name="Extra Deck" />
+    <card-field v-if="cards != null" :cards="cards" :deck-inventory="sideDeck"   name="Side Deck"  />
+    <card-field v-if="cards != null" :cards="cards" :deck-inventory="trunkDeck"  name="Trunk"      />
   </div>
 </template>
 
 <script>
 import apiClient, { basicAuth, routes } from "@/api/apiClient";
-import DeckDisplay from "@/components/DeckDisplay.vue";
+import CardField from "@/components/CardField.vue";
 
 export default {
-  name: "InventoryView",
-  components: { DeckDisplay },
+  name: "TrunkView",
+  components: { CardField },
   data() {
     return {
       username: "",

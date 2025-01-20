@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import InventoryView from "@/views/InventoryView.vue";
+import TrunkView from "@/views/TrunkView.vue";
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
     path: "/inventory",
     name: "inventory",
     component: InventoryView,
+  },
+  {
+    path: "/card-field",
+    name: "card-field",
+    component: TrunkView,
   },
 ];
 
