@@ -11,8 +11,10 @@
         </div>
         <div class="modal-details">
           <ul>
-            <li v-for="(value, key) in formattedCardDetails" :key="key" v-if="value !== null">
-              <strong>{{ key }}:</strong> {{ value }}
+            <li v-for="(value, key) in formattedCardDetails" :key="key">
+              <a  v-if="value !== null">
+                <strong>{{ key }}:</strong> {{ value }}
+              </a>
             </li>
           </ul>
         </div>
@@ -47,7 +49,10 @@ export default {
     },
   },
   methods: {
-    close() {
+    close(event) {
+      if (event) {
+        event.stopPropagation();
+      }
       this.$emit('close');
     },
   },

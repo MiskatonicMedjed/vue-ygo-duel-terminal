@@ -1,26 +1,22 @@
 <template>
-  <div
-    class="deck-display"
-    v-drag-and-drop:options="dragOptions"
-    :style="{ backgroundColor: backgroundColor }"
-  >
-  <h2>{{ name }}</h2>
-  <ul
-    :data-id="name"
-    @added="onCardAdded"
-    @removed="onCardRemoved"
-    @reordered="onCardReordered"
-    class="card-list"
-  >
-    <li
-      v-for="card in deck"
-      :key="card.id"
-      :data-id="card.id"
-      class="card-item"
+  <div class="deck-display" v-drag-and-drop:options="dragOptions">
+    <h2>{{ name }}</h2>
+    <ul
+      :data-id="name"
+      @added="onCardAdded"
+      @removed="onCardRemoved"
+      @reordered="onCardReordered"
+      class="card-list"
     >
-      <Card :card="card" />
-    </li>
-  </ul>
+      <li
+        v-for="card in deck"
+        :key="card.id"
+        :data-id="card.id"
+        class="card-item"
+      >
+        <Card :card="card" />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -28,13 +24,12 @@
 import Card from "@/components/Card.vue";
 
 export default {
-  name: "CardField",
+  name: "TrunkField",
   components: { Card },
   props: {
     name: { type: String, required: true },
     deckInventory: { required: true },
-    cards: { required: true },
-    backgroundColor: { type: String, default: '#f8f9fa' } // New prop for background color
+    cards: { required: true }
   },
   data() {
     return {
@@ -78,10 +73,12 @@ export default {
 };
 </script>
 
+
 <style lang="scss" scoped>
 .deck-display {
   margin: 15px;
   padding: 10px;
+  background-color: #d89a4e;
   border: 5px solid #393939;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -136,7 +133,7 @@ export default {
   }
 
   .card-item {
-    width: calc(10% - 5px); /* 5 cards per row with some gap */
+    width: calc(25% - 5px); /* 5 cards per row with some gap */
     box-sizing: border-box;
   }
 }

@@ -2,7 +2,6 @@
   <div class="card-wrapper" @click="openModal">
     <img :src="card.imageUrl" :alt="card.name" class="card-image" />
     <div class="card-copies">{{ card.copies }}</div>
-
     <CardModal
       v-if="showModal"
       :card="card"
@@ -16,6 +15,9 @@ import CardModal from './CardModal.vue';
 
 export default {
   name: "Card",
+  components: {
+    CardModal,
+  },
   props: {
     card: {
       type: Object,
@@ -32,11 +34,8 @@ export default {
       this.showModal = true;
     },
     closeModal() {
-      this.showModal = false; // Ensure this method properly toggles the modal visibility
+      this.showModal = false;
     },
-  },
-  components: {
-    CardModal,
   },
 };
 </script>

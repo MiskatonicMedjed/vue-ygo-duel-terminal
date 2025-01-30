@@ -1,23 +1,59 @@
 <template>
-  <div v-if="errorMessage != null" class="alert alert-danger">
-    <h1> {{ errorMessage }}</h1>
+  <div v-if="errorMessage" class="alert alert-danger">
+    <h1>{{ errorMessage }}</h1>
   </div>
-  <div class="container" v-if="errorMessage === null">
-    <h1>Inventory for {{ username }}</h1>
-    <card-field v-if="cards != null" :cards="cards" :deck-inventory="mainDeck"   name="Main Deck"  />
-    <card-field v-if="cards != null" :cards="cards" :deck-inventory="extraDeck"  name="Extra Deck" />
-    <card-field v-if="cards != null" :cards="cards" :deck-inventory="sideDeck"   name="Side Deck"  />
-    <card-field v-if="cards != null" :cards="cards" :deck-inventory="trunkDeck"  name="Trunk"      />
+  <div class="container" v-if="!errorMessage">
+    <div class="decks-wrapper">
+      <div class="left-decks">
+        <CardField
+          v-if="cards"
+          :cards="cards"
+          :deck-inventory="mainDeck"
+          background-color="#5f9ddd"
+          name="Main Deck"
+          @update-deck="updateDeck"
+          class="deck main-deck"
+        />
+        <CardField
+          v-if="cards"
+          :cards="cards"
+          :deck-inventory="extraDeck"
+          background-color="#8f67b8"
+          name="Extra Deck"
+          @update-deck="updateDeck"
+          class="deck extra-deck"
+        />
+        <CardField
+          v-if="cards"
+          :cards="cards"
+          :deck-inventory="sideDeck"
+          background-color="#8c8c8c"
+          name="Side Deck"
+          @update-deck="updateDeck"
+          class="deck side-deck"
+        />
+      </div>
+
+      <TrunkField
+        v-if="cards"
+        :cards="cards"
+        :deck-inventory="trunkDeck"
+        name="Trunk"
+        @update-deck="updateDeck"
+        class="deck trunk-deck"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import apiClient, { basicAuth, routes } from "@/api/apiClient";
 import CardField from "@/components/CardField.vue";
+import TrunkField from "@/components/TrunkField.vue";
 
 export default {
   name: "TrunkView",
-  components: { CardField },
+  components: { CardField, TrunkField },
   data() {
     return {
       username: "",
@@ -28,6 +64,12 @@ export default {
       trunkDeck: null,
       errorMessage: null
     };
+  },
+  methods: {
+    updateDeck(deckName, newDeck) {
+      console.log(`Updated ${deckName}:`, newDeck);
+      this[deckName.toLowerCase().replace(/\s/g, "")] = newDeck;
+    }
   },
   async created() {
     try {
@@ -43,68 +85,53 @@ export default {
       this.sideDeck = trunk.side_deck;
       this.trunkDeck = trunk.trunk_deck;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       this.errorMessage = "An error occurred";
     }
-
-  },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .container {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 100%;
   padding: 20px;
   background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+}
 
-  h1 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #343a40;
-  }
+.decks-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
 
-  ul {
-    list-style: none;
-    padding: 0;
+.left-decks {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 70%;
+}
 
-    .card-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      padding: 10px;
-      border: 1px solid #dee2e6;
-      border-radius: 8px;
-      background-color: #ffffff;
+.deck {
+  display: block;
+  width: 100%;
+}
 
-      .card-image {
-        width: 100px;
-        height: auto;
-        margin-right: 20px;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
+.main-deck {
+  aspect-ratio: 2;
+}
 
-      .card-details {
-        h2 {
-          font-size: 1.25rem;
-          margin: 0 0 10px;
-          color: #495057;
-        }
+.extra-deck,
+.side-deck {
+  aspect-ratio: 3;
+}
 
-        p {
-          margin: 0 0 5px;
-          color: #6c757d;
-        }
-
-        strong {
-          color: #212529;
-        }
-      }
-    }
-  }
+.trunk-deck {
+  aspect-ratio: 0.5;
+  width: 28%;
+  max-width: 480px;
 }
 </style>
